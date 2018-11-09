@@ -3,8 +3,8 @@ In DataWedge profile enable Keystroke output, set prefix and suffix in basic dat
 
 JavaScript code:
 ```javascript
-let parseScan = function(value) {<br />
-    alert(`Scanned value: "${value}".`);<br />
+let parseScan = function(value) {
+    alert(`Scanned value: "${value}".`);
 }
 
 let dataWedgeInput = new DataWedgeInput(parseScan, '^', '$');
