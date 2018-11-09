@@ -34,6 +34,9 @@ class DataWedgeInput
     on()
     {
         let current = this;
+        
+        let ele;
+        while(ele = document.getElementById('dataWedgeInput')) ele.remove();
 
         this.input = document.createElement('input');
         this.input.setAttribute('id', 'dataWedgeInput');
@@ -48,6 +51,6 @@ class DataWedgeInput
 
     off()
     {
-        document.body.removeChild(this.input);
+        this.input.remove();
     }
 }
