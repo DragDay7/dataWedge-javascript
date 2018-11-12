@@ -1,15 +1,17 @@
 class DataWedgeInput
 {
-    constructor(parseScan, prefix = '^', suffix = '$')
+    constructor(parseScan, prefix = '^', suffix = '$', keyEvents = [])
     {
         this.inputPrefix = prefix;
         this.inputSuffix = suffix;
         this.parseScan = parseScan;
+        this.enabled = false;
         let current = this;
 
         this.inputEvent = function ()
         {
             let value = this.value;
+            let events = keyEvents.filter(i => i.value === value);
             if (value.startsWith(current.inputPrefix) && value.endsWith(current.inputSuffix))
             {
                 value = value.substring(current.inputPrefix.length, value.length - current.inputSuffix.length);
@@ -18,6 +20,10 @@ class DataWedgeInput
                     current.parseScan(value);
                 else
                     alert(`Scanned value: "${value}". Missing parseScan function in constructor. See source code.`);
+            }
+            else if (events.length !== 0 && events[0].action !== undefined)
+            {
+                events[0].action();
             }
             this.value = '';
         };
@@ -31,12 +37,21 @@ class DataWedgeInput
         this.focusoutEvent = function () { this.focus(); };
     }
 
+    inputValue(value)
+    {
+        if (this.parseScan !== undefined)
+            this.parseScan(value);
+        else
+            alert(`Scanned value: "${value}". Missing parseScan function in constructor. See source code.`);
+    }
+
     on()
     {
+        this.enabled = true;
         let current = this;
-        
+
         let ele;
-        while(ele = document.getElementById('dataWedgeInput')) ele.remove();
+        while (ele = document.getElementById('dataWedgeInput')) ele.remove();
 
         this.input = document.createElement('input');
         this.input.setAttribute('id', 'dataWedgeInput');
@@ -51,6 +66,7 @@ class DataWedgeInput
 
     off()
     {
+        this.enabled = false;
         this.input.remove();
     }
 }
