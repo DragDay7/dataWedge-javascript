@@ -12,3 +12,17 @@ dataWedgeInput.on();
 // dataWedgeInput.off(); to disable.
 ```
 Virtual keyboard shouldn't show up if alert() isn't used.
+
+### Update:
+
+You can now add key shortcuts:
+```javascript
+let dataWedgeInput = new DataWedgeInput(parseScan, '^', '$', [
+    {
+        key: '*',
+        action: () => {
+            alert('I just pressed * button!');
+        }
+    }
+]);
+```
