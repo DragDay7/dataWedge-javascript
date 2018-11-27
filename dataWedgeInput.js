@@ -12,7 +12,8 @@ class DataWedgeInput
         this.inputEvent = function ()
         {
             let value = this.value;
-            let events = keyEvents.filter(i => i.value === value);
+            let events = keyEvents.filter(i => i.key === value);
+            console.log(events);
             if (value.startsWith(current.inputPrefix) && value.endsWith(current.inputSuffix))
             {
                 value = value.substring(current.inputPrefix.length, value.length - current.inputSuffix.length);
@@ -62,7 +63,7 @@ class DataWedgeInput
         this.input.addEventListener('focus', this.focusEvent);
         this.input.addEventListener('focusout', this.focusoutEvent);
         this.input.removeAttribute('readonly');
-        setTimeout(function () { current.input.focus(); }, 10);
+        setTimeout(function () { current.input.focus(); }, 50);
     }
 
     off()
