@@ -13,7 +13,6 @@ class DataWedgeInput
         {
             let value = this.value;
             let events = keyEvents.filter(i => i.key === value);
-            console.log(events);
             if (value.startsWith(current.inputPrefix) && value.endsWith(current.inputSuffix))
             {
                 value = value.substring(current.inputPrefix.length, value.length - current.inputSuffix.length);
