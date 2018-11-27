@@ -1,10 +1,11 @@
 class DataWedgeInput
 {
-    constructor(parseScan, prefix = '^', suffix = '$', keyEvents = [])
+    constructor(parseScan, prefix = '^', suffix = '$', keyEvents = [], appendTo = document.body)
     {
         this.inputPrefix = prefix;
         this.inputSuffix = suffix;
         this.parseScan = parseScan;
+        this.appendTo = appendTo;
         this.enabled = false;
         let current = this;
 
@@ -55,7 +56,7 @@ class DataWedgeInput
 
         this.input = document.createElement('input');
         this.input.setAttribute('id', 'dataWedgeInput');
-        document.body.append(this.input);
+        this.appendTo.append(this.input);
 
         this.input.addEventListener('input', this.inputEvent);
         this.input.addEventListener('focus', this.focusEvent);
