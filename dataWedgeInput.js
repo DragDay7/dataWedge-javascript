@@ -14,16 +14,14 @@ class DataWedgeInput
             let value = e.target.value;
             let events = keyEvents.filter(i => i.key === value);
             e.target.value = '';
-            
+
             if (value.startsWith(this.inputPrefix) && value.endsWith(this.inputSuffix))
             {
                 value = value.substring(this.inputPrefix.length, value.length - this.inputSuffix.length);
                 this.inputValue(value);
             }
             else if (value.startsWith(this.inputPrefix) && !value.endsWith(this.inputSuffix))
-            {
-                this.partialValue += value;
-            }
+                this.partialValue = value;
             else if (!value.startsWith(this.inputPrefix) && value.endsWith(this.inputSuffix))
             {
                 this.partialValue += value;
@@ -32,22 +30,25 @@ class DataWedgeInput
                 this.partialValue = '';
             }
             else if (this.partialValue.length > 0)
-            {
                 this.partialValue += value;
-            }
             else if (events.length !== 0 && events[0].action !== undefined)
             {
+                this.hideKeyboard();
                 events[0].action();
             }
+            else
+                this.hideKeyboard();
         };
 
-        this.focusEvent = () =>
-        {
-            this.input.setAttribute('readonly', 'readonly');
-            setTimeout(() => this.input.removeAttribute('readonly'), 10);
-        };
-
+        this.focusEvent = () => this.hideKeyboard();
         this.focusoutEvent = (e) => e.target.focus();
+        this.on();
+    }
+
+    hideKeyboard()
+    {
+        this.input.setAttribute('readonly', 'readonly');
+        setTimeout(() => this.input.removeAttribute('readonly'), 10);
     }
 
     inputValue(value)
@@ -72,7 +73,7 @@ class DataWedgeInput
         this.input.addEventListener('focus', this.focusEvent);
         this.input.addEventListener('focusout', this.focusoutEvent);
         this.input.removeAttribute('readonly');
-        setTimeout( () => this.input.focus(), 50);
+        setTimeout(() => this.input.focus(), 50);
     }
 
     off()
