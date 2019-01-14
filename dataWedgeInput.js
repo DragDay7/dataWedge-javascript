@@ -7,35 +7,47 @@ class DataWedgeInput
         this.parseScan = parseScan;
         this.appendTo = appendTo;
         this.enabled = false;
-        let current = this;
+        this.partialValue = '';
 
-        this.inputEvent = function ()
+        this.inputEvent = (e) =>
         {
-            let value = this.value;
+            let value = e.target.value;
             let events = keyEvents.filter(i => i.key === value);
-            if (value.startsWith(current.inputPrefix) && value.endsWith(current.inputSuffix))
+            e.target.value = '';
+            
+            if (value.startsWith(this.inputPrefix) && value.endsWith(this.inputSuffix))
             {
-                value = value.substring(current.inputPrefix.length, value.length - current.inputSuffix.length);
-
-                if (current.parseScan !== undefined)
-                    current.parseScan(value);
-                else
-                    alert(`Scanned value: "${value}". Missing parseScan function in constructor. See source code.`);
+                value = value.substring(this.inputPrefix.length, value.length - this.inputSuffix.length);
+                this.inputValue(value);
+            }
+            else if (value.startsWith(this.inputPrefix) && !value.endsWith(this.inputSuffix))
+            {
+                this.partialValue += value;
+            }
+            else if (!value.startsWith(this.inputPrefix) && value.endsWith(this.inputSuffix))
+            {
+                this.partialValue += value;
+                this.partialValue = this.partialValue.substring(this.inputPrefix.length, this.partialValue.length - this.inputSuffix.length);
+                this.inputValue(this.partialValue);
+                this.partialValue = '';
+            }
+            else if (this.partialValue.length > 0)
+            {
+                this.partialValue += value;
             }
             else if (events.length !== 0 && events[0].action !== undefined)
             {
                 events[0].action();
             }
-            this.value = '';
         };
 
-        this.focusEvent = function ()
+        this.focusEvent = () =>
         {
-            current.input.setAttribute('readonly', 'readonly');
-            setTimeout(function () { current.input.removeAttribute('readonly'); }, 10);
+            this.input.setAttribute('readonly', 'readonly');
+            setTimeout(() => this.input.removeAttribute('readonly'), 10);
         };
 
-        this.focusoutEvent = function () { this.focus(); };
+        this.focusoutEvent = (e) => e.target.focus();
     }
 
     inputValue(value)
@@ -43,13 +55,12 @@ class DataWedgeInput
         if (this.parseScan !== undefined)
             this.parseScan(value);
         else
-            alert(`Scanned value: "${value}". Missing parseScan function in constructor. See source code.`);
+            alert(`Scanned value: "${value}". Missing parseScan function in constructor.`);
     }
 
     on()
     {
         this.enabled = true;
-        let current = this;
 
         let ele;
         while (ele = document.getElementById('dataWedgeInput')) ele.remove();
@@ -57,12 +68,11 @@ class DataWedgeInput
         this.input = document.createElement('input');
         this.input.setAttribute('id', 'dataWedgeInput');
         this.appendTo.append(this.input);
-
         this.input.addEventListener('input', this.inputEvent);
         this.input.addEventListener('focus', this.focusEvent);
         this.input.addEventListener('focusout', this.focusoutEvent);
         this.input.removeAttribute('readonly');
-        setTimeout(function () { current.input.focus(); }, 50);
+        setTimeout( () => this.input.focus(), 50);
     }
 
     off()
