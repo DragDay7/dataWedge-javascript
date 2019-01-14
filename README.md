@@ -8,7 +8,7 @@ let parseScan = function(value) {
 }
 
 let dataWedgeInput = new DataWedgeInput(parseScan, '^', '$');
-dataWedgeInput.on();
+// dataWedgeInput.on();
 // dataWedgeInput.off(); to disable.
 ```
 Virtual keyboard shouldn't show up if alert() isn't used.
