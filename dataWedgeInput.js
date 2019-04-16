@@ -12,7 +12,7 @@ class DataWedgeInput
         this.inputEvent = (e) =>
         {
             let value = e.target.value;
-            let events = keyEvents.length === 0 ? keyEvents : keyEvents.filter(i => i.key.includes(value));
+            let events = keyEvents.filter(i => i.key.includes(value));
             e.target.value = '';
 
             if (value.startsWith(this.inputPrefix) && value.endsWith(this.inputSuffix))
